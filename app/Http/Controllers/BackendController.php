@@ -17,6 +17,8 @@ use App\Lowiczman;
 use App\Lowiczwoman;
 use App\Zywiecman;
 use App\Zywiecwoman;
+//use App\Room;
+//use App\{TouristObject,Reservation, City, User, Photo, Address, Article, Room, Notification};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Magazineapp\Interfaces\BackendRepositoryInterface;
@@ -610,21 +612,21 @@ class BackendController extends Controller
     }
 
     /* Lecture 6 */
-    public function cities()
+    // public function cities()
+    // {
+    //     return view('backend.cities');
+    // }
+    
+    public function myobjects(Request $request)
     {
-        return view('backend.cities');
+        $objects = $this->bR->getMyObjects($request);
+        //dd($objects);
+
+        return view('backend.myobjects',['objects'=>$objects]);
     }
     
-    /* Lecture 6 */
-    public function myobjects()
+    public function profile(Request $request)
     {
-        return view('backend.myobjects');
-    }
-    
-    /* Lecture 6 */
-    public function profile(Request $request /* Lecture 39 */)
-    {
-        /* Lecture 39 */
         if ($request->isMethod('post')) 
         {
 
@@ -656,7 +658,7 @@ class BackendController extends Controller
             return redirect()->back();
         }
 
-        return view('backend.profile',['user'=>Auth::user()]/* Lecture 39 */);
+        return view('backend.profile',['user'=>Auth::user()]);
     }
 
     public function deletePhoto($id)
@@ -673,15 +675,91 @@ class BackendController extends Controller
         return redirect()->back();
     }
 
-    /* Lecture 6 */
-    public function saveobject()
+    /* zapisywanie obiektu/teamu*/
+    public function saveobject($id = null, Request $request)
     {
+        /* zapis edytowanego obiektu */
+        if($request->isMethod('post'))
+        {
+            if($id)
+            $this->authorize('checkOwner', $this->bR->getObject($id));//autoryzacja
+
+            $this->bG->saveObject($id, $request);
+
+            //if($id)
+            //return redirect()->back();
+            //return redirect()->route('myObjects');
+            //else
+            return redirect()->route('myObjects');
+
+        }
+
+
+        /*edycja*/
+        if($id)
+        //return view('backend.saveobject',['object'=>$this->bR->getObject($id),'cities'=>$this->bR->getCities()]);
+        return view('backend.saveobject',['object'=>$this->bR->getObject($id)]);
+        else/*dodawanie*/
+        //return view('backend.saveobject',['cities'=>$this->bR->getCities()]);
         return view('backend.saveobject');
     }
-    
-    /* Lecture 6 */
-    public function saveroom()
+
+    public function deleteObject($id)
     {
-        return view('backend.saveroom');
+        $this->authorize('checkOwner', $this->bR->getObject($id));
+        
+        $this->bR->deleteObject($id);
+               
+        return redirect()->back();
+    
     }
+    
+    public function saveRoom($id = null, Request $request)
+    {
+
+        if($request->isMethod('post'))
+        {
+            if($id) // editing room
+            $this->authorize('checkOwner', $this->bR->getRoom($id));
+            else // adding a new room
+            $this->authorize('checkOwner', $this->bR->getObject($request->input('object_id')));   
+
+            $this->bG->saveRoom($id, $request);
+            
+            //if($id)
+            //return redirect()->back();
+            //return redirect()->route('myObjects');
+            //else
+            return redirect()->route('myObjects');
+
+        }
+
+        if($id)
+        return view('backend.saveroom',['room'=>$this->bR->getRoom($id)]);
+        else
+        return view('backend.saveroom',['object_id'=>$request->input('object_id')]);
+    }
+    
+    public function deleteRoom($id)
+    {
+        $room =  $this->bR->getRoom($id);
+        
+        $this->authorize('checkOwner', $room);
+
+        $this->bR->deleteRoom($room);
+
+        return redirect()->back();
+    }
+
+    // public function deleteArticle($id)
+    // {
+    //     return 'to do';
+    // }
+    
+    
+    // /* Lecture 44 */
+    // public function saveArticle($object_id = null)
+    // {
+    //     return 'to do';
+    // }
 }

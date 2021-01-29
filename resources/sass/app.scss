@@ -116,6 +116,12 @@ section {
     text-shadow: 1px 0px 1px rgb(80, 74, 74);
 }
 
+@media (min-width: 768px) and (max-width: 1260px) {
+.sideMenu a {
+    font-size: 13px;
+    }
+}
+
 .sidebar {
   display: block;
   text-align: center;

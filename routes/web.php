@@ -24,9 +24,10 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){  /* Lecture 6 
     
   //Route::get('/','BackendController@index')->name('adminHome'); /* Lecture 6 */  
   Route::get(trans('routes.myobjects'),'BackendController@myobjects')->name('myObjects'); /* Lecture 6 */  
-  Route::get(trans('routes.saveobject'),'BackendController@saveObject')->name('saveObject'); /* Lecture 6 */  
+  Route::match(['GET','POST'],trans('routes.saveobject').'/{id?}','BackendController@saveObject')->name('saveObject'); 
   Route::match(['GET','POST'],trans('routes.profile'),'BackendController@profile')->name('profile'); /* Lecture 39 */  
-  Route::get(trans('routes.saveroom'),'BackendController@saveRoom')->name('saveRoom'); /* Lecture 6 */  
+  Route::match(['GET','POST'],trans('routes.saveroom').'/{id?}', 'BackendController@saveRoom')->name('saveRoom'); /* Lecture 47 */  
+  Route::get(trans('routes.deleteroom').'/{id}', 'BackendController@deleteRoom')->name('deleteRoom');
   Route::get('/cities','BackendController@cities')->name('cities.index'); /* Lecture 6 */
   Route::get('/deletePhoto/{id}', 'BackendController@deletePhoto')->name('deletePhoto');
 
@@ -46,7 +47,9 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){  /* Lecture 6 
   ////////////////////////////////////////////////////////////////////////////////////////////
   Route::get('/shop/delete/{id}','BackendController@delete')->name('shop.delete');
   Route::get('/shop','BackendController@index')->name('shop.index');
-  //Route::resource('/shop', 'BackendController');    
+  //Route::resource('/shop', 'BackendController'); 
+  Route::get(trans('routes.deleteobject').'/{id}', 'BackendController@deleteObject')->name('deleteObject'); 
+  
 });
 
 Auth::routes();

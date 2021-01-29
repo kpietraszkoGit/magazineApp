@@ -1,127 +1,97 @@
 @extends('layouts.backend')
 
-@section('content')
-<h2>Adding a new object(team) / editing</h2>
-<form method="POST" enctype="multipart/form-data" class="form-horizontal">
+@section('content') 
+
+<!-- Lecture 44 -->
+@if( $object ?? false ) <?php /* = if( isset($object) && $object != false) */ ?>
+<h2 class="sub-header headerAdmin"><i class='icon-edit'></i> Editing team {{ $object->name }}</h2>
+@else
+<h2 class="sub-header headerAdmin"><i class='icon-plus'></i> Adding a new team</h2>
+@endif
+
+<form method="POST" enctype="multipart/form-data" class="form-horizontal" action="{{ route('saveObject',['id'=>$object->id ?? null]) }}">
     <fieldset>
-        <div class="form-group">
-            <label for="city" class="col-lg-2 control-label">City *</label>
-            <div class="col-lg-10">
-                <select name="city" class="form-control" id="city">
-                    <option>Washington</option>
-                    <option>Krakow</option>
-                    <option>Moscow</option>
-                </select>
-            </div>
-        </div>
         <div class="form-group">
             <label for="name" class="col-lg-2 control-label">Name *</label>
             <div class="col-lg-10">
-                <input name="name" required type="text" class="form-control" id="name" placeholder="">
+                <input name="name" type="text" value="{{ $object->name ?? old('name') }}" class="form-control" id="name" placeholder="">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="city" class="col-lg-2 control-label">City *</label>
+            <div class="col-lg-10">
+                <input name="city" type="text" value="{{ $object->address->city ?? old('city') }}" class="form-control" id="city" placeholder="">
             </div>
         </div>
         <div class="form-group">
             <label for="street" class="col-lg-2 control-label">Street *</label>
             <div class="col-lg-10">
-                <input name="street" required type="text" class="form-control" id="street" placeholder="">
+                <input name="street" type="text" value="{{ $object->address->street ?? old('street') }}" class="form-control" id="street" placeholder="">
             </div>
         </div>
         <div class="form-group">
             <label for="number" class="col-lg-2 control-label">Number *</label>
             <div class="col-lg-10">
-                <input name="number" required type="number" class="form-control" id="number" placeholder="">
+                <input name="number" type="number" value="{{ $object->address->number ?? old('number') }}" class="form-control" id="number" placeholder="">
             </div>
         </div>
         <div class="form-group">
-            <label for="descr" class="col-lg-2 control-label">Object description *</label>
+            <label for="descr" class="col-lg-2 control-label">Team description *</label>
             <div class="col-lg-10">
-                <textarea name="description" required class="form-control" rows="3" id="descr"></textarea>
+                <textarea name="description" class="form-control" rows="3" id="descr">{{ $object->description ?? old('description') /* Lecture 44 */ }}</textarea>
             </div>
         </div>
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
-                <label for="objectPictures">Object gallery</label>
+                <label for="objectPictures">Team gallery</label>
                 <input type="file" name="objectPictures[]" id="objectPictures" multiple>
-                <p class="help-block">Add a photo gallery of the object</p>
+                <p class="help-block">Add a photo gallery of the team</p>
             </div>
         </div>
 
+        @if( $object ?? false )
         <div class="col-lg-10 col-lg-offset-2">
 
-            <?php for ($i = 1; $i <= 2; $i++): ?>
+            @foreach( $object->photos->chunk(4) as $chunked_photos )
 
                 <div class="row">
 
 
-                    <?php for ($j = 1; $j <= 4; $j++): ?>
+                    @foreach( $chunked_photos as $photo )
 
                         <div class="col-md-3 col-sm-6">
                             <div class="thumbnail">
-                                <img class="img-responsive" src="http://lorempixel.com/275/150/city/?x=<?= mt_rand(1, 9999999) ?>" alt="...">
+                                <img class="img-responsive" src="{{ $photo->path ?? $placeholder }}" alt="...">
                                 <div class="caption">
-                                    <p><a href="#" class="btn btn-primary btn-xs" role="button">Delete</a></p>
+                                    <p><a href="{{ route('deletePhoto',['id'=>$photo->id]) }}" class="btn btn-primary btn-xs" role="button">Delete</a></p>
                                 </div>
 
                             </div>
                         </div>
 
-                    <?php endfor; ?>
+                    @endforeach 
 
                 </div>
 
 
-            <?php endfor; ?>
+            @endforeach 
 
         </div>
 
-        <div class="col-lg-10 col-lg-offset-2">
-            Articles:
-            <ul class="list-group">
-                <?php for ($i = 1; $i <= 6; $i++): ?>
-                    <li class="list-group-item">
-                        Title <a href="">delete</a>
-                    </li>
-                <?php endfor; ?>
-
-            </ul>
-        </div>
+        @endif
 
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
-                <button type="submit" class="btn btn-primary">Save object</button>
+                <button type="submit" class="btn btn-primary">Save team</button>
             </div>
         </div>
 
     </fieldset>
+    {{ csrf_field() }}
 </form>
 
-<div class="col-lg-10 col-lg-offset-2">
-
-    <form method="POST" class="form-horizontal">
-        <fieldset>
-
-            <div class="form-group">
-                <label for="textTitle" class="col-lg-2 control-label">Title *</label>
-                <div class="col-lg-10">
-                    <input name="title" required type="text" class="form-control" id="textTitle" placeholder="">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="textArea" class="col-lg-2 control-label">Content *</label>
-                <div class="col-lg-10">
-                    <textarea name="content" required class="form-control" rows="3" id="textArea"></textarea>
-                    <span class="help-block">Add an article about this object.</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-2">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </div>
-        </fieldset>
-    </form>
-
+<div class="footerAdmin">
+    <p>&copy; Kamil Pietraszko 2021</p>
 </div>
+
 @endsection

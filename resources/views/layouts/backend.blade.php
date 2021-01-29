@@ -82,9 +82,8 @@
                 <div class="col-sm-3 col-md-2 sidebar">
                     <ul class="nav nav-sidebar sideMenu">
                         <li class="active"><a href="{{ route('adminHome') }}">Clothes inventory <i class='icon-right-big'></i><span class="sr-only">(current)</span></a></li>
-                        <li><a href="{{ route('myObjects') }}">My objects(Persons in the team) <i class='icon-right-big'></i></a></li>
-                        <li><a href="{{ route('saveObject') }}">Add a new object(team)</a></li>
-                        <li><a href="{{ route('cities.index') }}">Cities tutaj pozmieniac?</a></li>
+                        <li><a href="{{ route('myObjects') }}">List of teams <i class='icon-right-big'></i></a></li>
+                        <li><a href="{{ route('saveObject') }}">Add a new team <i class='icon-right-big'></i></a></li>
                     </ul>
                 
                     @if(Auth::user()->photos->first() ) <!-- Lecture 39 -->

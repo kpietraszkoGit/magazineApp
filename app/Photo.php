@@ -28,6 +28,16 @@ class Photo extends Model
     {
         return $this->original['path'];
     }
+
+    public static function imageRules($request,$type)
+    {
+        for ( $i = 0; $i <= count($request->file($type))-1 ; $i++ ) 
+        {
+            $rules["$type.$i"] = 'mimes:jpeg,jpg,png|max:4000';
+        }
+
+        return $rules;
+    }
     
     
 }
