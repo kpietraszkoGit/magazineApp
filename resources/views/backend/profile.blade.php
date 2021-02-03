@@ -1,6 +1,6 @@
-@extends('layouts.backend') <!-- Lecture 5 -->
+@extends('layouts.backend')
 
-@section('content') <!-- Lecture 5 -->
+@section('content')
 <h2>User data</h2>
 <form action="{{ route('profile') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
     <fieldset>
@@ -24,34 +24,33 @@
         </div>
         <div class="form-group">
             <div class="col-lg-10 col-lg-offset-2">
-                <button type="submit" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-10 col-lg-offset-2">
                 <label for="userPicture">Add your photo</label>
                 <input name="userPicture" type="file" id="userPicture">
             </div>
         </div>
 
        
-        @if( $user->photos->first() ) <!-- Lecture 39 -->
+        @if( $user->photos->first() )
         <div class="col-lg-10 col-lg-offset-2">
             <div class="row">
                 <div class="col-md-3 col-sm-6">
                     <div class="thumbnail">
-                        <img class="img-responsive" src="{{ $user->photos->first()->path ?? $placeholder /* Lecture 39 */ }}" alt="...">
+                        <img class="img-responsive" src="{{ $user->photos->first()->path ?? $placeholder }}" alt="...">
                         <div class="caption">
-                            <p><a href="{{ route('deletePhoto',['id'=>$user->photos->first()->id]) /* Lecture 39 */ }}" class="btn btn-primary btn-xs" role="button">Delete</a></p>
+                            <p><a href="{{ route('deletePhoto',['id'=>$user->photos->first()->id]) }}" class="btn btn-primary btn-xs" role="button">Delete</a></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        @endif <!-- Lecture 39 -->
-       
+        @endif 
+        <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
 
     </fieldset>
-    {{ csrf_field() /* Lecture 39 */ }}
+    {{ csrf_field() }}
 </form>
-@endsection <!-- Lecture 5 -->
+@endsection

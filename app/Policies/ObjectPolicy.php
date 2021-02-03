@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Policies; /* Lecture 43 */
+namespace App\Policies;
 
 use App\{User,TeamObject}; 
 use Illuminate\Auth\Access\HandlesAuthorization; 
@@ -18,8 +18,7 @@ class ObjectPolicy
     {
         //
     }
-    
-    
+     
     public function checkOwner(User $user, TeamObject $object)
     {
         return $user->id === $object->user_id;     

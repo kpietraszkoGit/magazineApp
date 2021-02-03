@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\{User,Photo}; /* Lecture 39 */
-use Illuminate\Auth\Access\HandlesAuthorization; /* Lecture 39 */
+use App\{User,Photo};
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PhotoPolicy
 {
@@ -23,10 +23,10 @@ class PhotoPolicy
     {
         if($photo->photoable_type == 'App\User')
         return $user->id === $photo->photoable_id;    
-        // elseif($photo->photoable_type == 'App\TouristObject')
-        // return $user->id === $photo->photoable->user_id;   
-        // elseif($photo->photoable_type == 'App\Room')
-        // return $user->id === $photo->photoable->object->user_id;   
+        elseif($photo->photoable_type == 'App\TeamObject')
+        return $user->id === $photo->photoable->user_id;   
+        elseif($photo->photoable_type == 'App\Person')
+        return $user->id === $photo->photoable->object->user_id;   
          
     }
     

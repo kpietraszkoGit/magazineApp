@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Magazineapp\Interfaces; /* Lecture 27 */
+namespace App\Magazineapp\Interfaces;
 
-/* Lecture 27 */
 interface BackendRepositoryInterface   {
-    
-
+    //
 }

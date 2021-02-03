@@ -9,27 +9,20 @@ class TeamObject extends Model
 {
     protected $table = 'objects';
     public $timestamps = false;
-
-    //use magazineapp\Presenters\ObjectPresenter;
-
-    // public function city() 
-    // {
-    //     return $this->belongsTo('App\City');
-    // }
     
     public function photos()
     {
-        return $this->morphMany('App\Photo', 'photoable');//relacja polimorficzna
+        return $this->morphMany('App\Photo', 'photoable');
     }
 
     public function scopeOrdered($query)
     {
-        return $query->orderBy('name', 'asc');//posegregowanie od A do Z
+        return $query->orderBy('name', 'asc');
     }
 
     public function users()
     {
-        return $this->morphToMany('App\User', 'likeable');//relacja wiele to wielu
+        return $this->morphToMany('App\User', 'likeable');
     }
 
     public function user()
@@ -39,26 +32,11 @@ class TeamObject extends Model
     
     public function address()
     {
-        return $this->hasOne('App\Address','object_id');//relacja jeden do jednego
+        return $this->hasOne('App\Address','object_id');
     }
     
-    public function rooms()
+    public function people()
     {
-        return $this->hasMany('App\Room','object_id');//jeden do wielu
+        return $this->hasMany('App\Person','object_id');
     }
-    
-    // public function comments()
-    // {
-    //     return $this->morphMany('App\Comment', 'commentable');//relacja jeden do wielu
-    // }
-    
-    // public function articles()
-    // {
-    //     return $this->hasMany('App\Article','object_id');
-    // }
-
-    // public function isLiked()
-    // {
-    //     return $this->users()->where('user_id', Auth::user()->id)->exists();
-    // }
 }

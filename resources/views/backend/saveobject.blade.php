@@ -2,7 +2,6 @@
 
 @section('content') 
 
-<!-- Lecture 44 -->
 @if( $object ?? false ) <?php /* = if( isset($object) && $object != false) */ ?>
 <h2 class="sub-header headerAdmin"><i class='icon-edit'></i> Editing team {{ $object->name }}</h2>
 @else
@@ -38,7 +37,7 @@
         <div class="form-group">
             <label for="descr" class="col-lg-2 control-label">Team description *</label>
             <div class="col-lg-10">
-                <textarea name="description" class="form-control" rows="3" id="descr">{{ $object->description ?? old('description') /* Lecture 44 */ }}</textarea>
+                <textarea name="description" class="form-control" rows="3" id="descr">{{ $object->description ?? old('description') }}</textarea>
             </div>
         </div>
         <div class="form-group">

@@ -2,23 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Product;
-use App\Highlanderoutfitman;
-use App\Highlanderoutfitwoman;
-use App\Shepherdoutfitman;
-use App\Shepherdoutfitwoman;
-use App\Cracowman;
-use App\Cracowwoman;
-use App\Cracoweastman;
-use App\Cracoweastwoman;
-use App\Lachyman;
-use App\Lachywoman;
-use App\Lowiczman;
-use App\Lowiczwoman;
-use App\Zywiecman;
-use App\Zywiecwoman;
-//use App\Room;
-//use App\{TouristObject,Reservation, City, User, Photo, Address, Article, Room, Notification};
+use App\{TeamObject, Person, Zywiecwoman, Zywiecman, Lowiczwoman, Lowiczman, Lachywoman, Lachyman, Cracoweastwoman, Cracoweastman, Cracowwoman, Cracowman, Shepherdoutfitwoman, Shepherdoutfitman, Highlanderoutfitwoman, Highlanderoutfitman};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Magazineapp\Interfaces\BackendRepositoryInterface;
@@ -30,15 +14,12 @@ class BackendController extends Controller
 {
     public function __construct(BackendGateway $backendGateway, BackendRepositoryInterface $backendRepository)
     {
-        $this->bG = $backendGateway; //$bG
-        $this->bR = $backendRepository; //$bR
+        $this->bG = $backendGateway;
+        $this->bR = $backendRepository;
     }
 
     public function index()
-    {
-        // $products = Product::all();
-        // return view('backend.index', compact('products'));
-        //przekazanie danych do wyświetlenia w widoku 
+    { 
         $highlanderoutfitmen = Highlanderoutfitman::all();
         $highlanderoutfitwomen = Highlanderoutfitwoman::all();
         $shepherdoutfitmen = Shepherdoutfitman::all();
@@ -63,7 +44,6 @@ class BackendController extends Controller
             return view('backend.create', ['table'=> 'Highlanderoutfitman']);
         }
         elseif($request->table == 'Highlanderoutfitwoman') {
-            //dump('hello Highlanderoutfitwoman');
             return view('backend.create', ['table'=> 'Highlanderoutfitwoman']);
         }
         elseif($request->table == 'Shepherdoutfitman') {
@@ -91,19 +71,15 @@ class BackendController extends Controller
             return view('backend.create', ['table'=> 'Lachywoman']);
         }
         elseif($request->table == 'Lowiczman') {
-            //dump('hello Lachyman');
             return view('backend.create', ['table'=> 'Lowiczman']);
         }
         elseif($request->table == 'Lowiczwoman') {
-            //dump('hello Lachywoman');
             return view('backend.create', ['table'=> 'Lowiczwoman']);
         }
         elseif($request->table == 'Zywiecman') {
-            //dump('hello Lachyman');
             return view('backend.create', ['table'=> 'Zywiecman']);
         }
         elseif($request->table == 'Zywiecwoman') {
-            //dump('hello Lachywoman');
             return view('backend.create', ['table'=> 'Zywiecwoman']);
         }
         else {
@@ -113,27 +89,11 @@ class BackendController extends Controller
 
     public function store(Request $request)
     {
-        // $this->validate($request,[
-        //     'name' => 'required',
-        //     'price' => 'required',
-        //     ]);
-
-        // // Metoda Nr 1
-        // $product = new Product;
-        // $product->name = $request->name;
-        // $product->price = $request->price;
-        // $product->save();
-
-        // // Metoda Nr 2
-        // // product::create($request->all());
-
-        // return redirect(route('adminHome'));
         $this->validate($request,[
             'name' => 'required|min:3',
             'quantity' => 'required',
             ]);
 
-        // Metoda Nr 1
         if($request->table == 'Highlanderoutfitman'){
             //dump('helloAdminStore');
             $highlanderoutfitman = new Highlanderoutfitman;
@@ -143,7 +103,6 @@ class BackendController extends Controller
             $highlanderoutfitman->save();
         }
         elseif($request->table == 'Highlanderoutfitwoman'){
-            //dump('helloUserStore');
             $highlanderoutfitwoman = new Highlanderoutfitwoman;
             $highlanderoutfitwoman->name = $request->name;
             $highlanderoutfitwoman->quantity = $request->quantity;
@@ -151,7 +110,6 @@ class BackendController extends Controller
             $highlanderoutfitwoman->save();
         }
         elseif($request->table == 'Shepherdoutfitman'){
-            //dump('helloUserStore');
             $shepherdoutfitman = new Shepherdoutfitman;
             $shepherdoutfitman->name = $request->name;
             $shepherdoutfitman->quantity = $request->quantity;
@@ -159,7 +117,6 @@ class BackendController extends Controller
             $shepherdoutfitman->save();
         }
         elseif($request->table == 'Shepherdoutfitwoman'){
-            //dump('helloUserStore');
             $shepherdoutfitwoman = new Shepherdoutfitwoman;
             $shepherdoutfitwoman->name = $request->name;
             $shepherdoutfitwoman->quantity = $request->quantity;
@@ -167,7 +124,6 @@ class BackendController extends Controller
             $shepherdoutfitwoman->save();
         }
         elseif($request->table == 'Cracowman'){
-            //dump('helloUserStore');
             $cracowman = new Cracowman;
             $cracowman->name = $request->name;
             $cracowman->quantity = $request->quantity;
@@ -175,7 +131,6 @@ class BackendController extends Controller
             $cracowman->save();
         }
         elseif($request->table == 'Cracowwoman'){
-            //dump('helloUserStore');
             $cracowwoman = new Cracowwoman;
             $cracowwoman->name = $request->name;
             $cracowwoman->quantity = $request->quantity;
@@ -244,8 +199,6 @@ class BackendController extends Controller
             Session::flash('alert-class', 'alert-danger');
             return redirect(route('adminHome'));
         }
-        // Metoda Nr 2
-        //product::create($request->all());
         Session::flash('message', 'Save successfully!');
         Session::flash('alert-class', 'alert-success');
         return redirect(route('adminHome'));
@@ -254,18 +207,12 @@ class BackendController extends Controller
 
     public function show($id, Request $request)
     {
-        // $product = Product::findOrFail($id);
-        // return view('backend.show', compact('product'));
-        
-        //dump($id);
         if($request->table == 'Highlanderoutfitman'){
-            //dump('hello Highlanderoutfitman show');
             $highlanderoutfitman = Highlanderoutfitman::findOrFail($id);
             $table = 'Highlanderoutfitman';
             return view('backend.show', compact('highlanderoutfitman', 'table'));
         }
         elseif($request->table == 'Highlanderoutfitwoman') {
-            //dump('hello Highlanderoutfitwoman show');
             $highlanderoutfitwoman = Highlanderoutfitwoman::findOrFail($id);
             $table = 'Highlanderoutfitwoman';
             return view('backend.show', compact('highlanderoutfitwoman', 'table'));
@@ -337,32 +284,22 @@ class BackendController extends Controller
 
     public function edit($id, Request $request)
     {
-        // $product = Product::find($id);
-        // return view('backend.edit', compact('product'));
-        // $highlanderoutfitman = Highlanderoutfitman::find($id);
-        // $highlanderoutfitwoman = Highlanderoutfitwoman::find($id);
-        // return view('backend.edit', compact('highlanderoutfitman', 'highlanderoutfitwomen'));
-
         if($request->table == 'Highlanderoutfitman'){
-            //dump('hello Highlanderoutfitman show');
             $highlanderoutfitman = Highlanderoutfitman::find($id);
             $table = 'Highlanderoutfitman';
             return view('backend.edit', compact('highlanderoutfitman', 'table'));
         }
         elseif($request->table == 'Highlanderoutfitwoman'){
-            //dump('hello Highlanderoutfitwoman show');
             $highlanderoutfitwoman = Highlanderoutfitwoman::find($id);
             $table = 'Highlanderoutfitwoman';
             return view('backend.edit', compact('highlanderoutfitwoman', 'table'));
         }
         elseif($request->table == 'Shepherdoutfitman'){
-            //dump('hello Highlanderoutfitwoman show');
             $shepherdoutfitman = Shepherdoutfitman::find($id);
             $table = 'Shepherdoutfitman';
             return view('backend.edit', compact('shepherdoutfitman', 'table'));
         }
         elseif($request->table == 'Shepherdoutfitwoman'){
-            //dump('hello Highlanderoutfitwoman show');
             $shepherdoutfitwoman = Shepherdoutfitwoman::find($id);
             $table = 'Shepherdoutfitwoman';
             return view('backend.edit', compact('shepherdoutfitwoman', 'table'));
@@ -424,22 +361,11 @@ class BackendController extends Controller
 
     public function update($id, Request $request)
     {
-        // $this->validate($request,[
-        //     'name' => 'required',
-        //     'price' => 'required',
-        //     ]);
-        // $product = Product::find($id);
-        // $product->name = $request->name;
-        // $product->price = $request->price;
-        // $product->save();  
-        // return redirect(route('shop.index'));
-
         $this->validate($request,[
             'name' => 'required',
             'quantity' => 'required',
             ]);
-        //dump($id);
-        // Metoda Nr 1
+
         if($request->table == 'Highlanderoutfitman'){
             $highlanderoutfitman = Highlanderoutfitman::find($id);
             $highlanderoutfitman->name = $request->name;
@@ -551,7 +477,6 @@ class BackendController extends Controller
 
     public function delete($id, Request $request)
     {
-        //dump($request->table);
         if($request->table == 'Highlanderoutfitman'){
             dump('hello Highlanderoutfitman show');
             $highlanderoutfitman = Highlanderoutfitman::find($id);
@@ -610,12 +535,6 @@ class BackendController extends Controller
         Session::flash('alert-class', 'alert-success');
         return redirect()->back();
     }
-
-    /* Lecture 6 */
-    // public function cities()
-    // {
-    //     return view('backend.cities');
-    // }
     
     public function myobjects(Request $request)
     {
@@ -634,10 +553,9 @@ class BackendController extends Controller
             
             if ($request->hasFile('userPicture'))
             {
-                $path = $request->file('userPicture')->store('users', 'public'); /* Lecture 40 */
+                $path = $request->file('userPicture')->store('users', 'public');
                 //dd($path);
 
-                /* Lecture 40 */
                 if (count($user->photos) != 0)
                 {
                     $photo = $this->bR->getPhoto($user->photos->first()->id);
@@ -664,43 +582,36 @@ class BackendController extends Controller
     public function deletePhoto($id)
     {
 
-        $photo = $this->bR->getPhoto($id); /* Lecture 40 */
+        $photo = $this->bR->getPhoto($id);
         
         $this->authorize('checkOwner', $photo);
         
-        $path = $this->bR->deletePhoto($photo); /* Lecture 40 */
+        $path = $this->bR->deletePhoto($photo);
         
-        Storage::disk('public')->delete($path); /* Lecture 40 */
+        Storage::disk('public')->delete($path);
 
         return redirect()->back();
     }
 
-    /* zapisywanie obiektu/teamu*/
     public function saveobject($id = null, Request $request)
     {
-        /* zapis edytowanego obiektu */
         if($request->isMethod('post'))
         {
             if($id)
-            $this->authorize('checkOwner', $this->bR->getObject($id));//autoryzacja
+            $this->authorize('checkOwner', $this->bR->getObject($id));
 
             $this->bG->saveObject($id, $request);
 
-            //if($id)
-            //return redirect()->back();
-            //return redirect()->route('myObjects');
-            //else
+            // if($id)
+            // return redirect()->back();
+            // else
             return redirect()->route('myObjects');
 
         }
 
-
-        /*edycja*/
         if($id)
-        //return view('backend.saveobject',['object'=>$this->bR->getObject($id),'cities'=>$this->bR->getCities()]);
         return view('backend.saveobject',['object'=>$this->bR->getObject($id)]);
-        else/*dodawanie*/
-        //return view('backend.saveobject',['cities'=>$this->bR->getCities()]);
+        else
         return view('backend.saveobject');
     }
 
@@ -711,55 +622,51 @@ class BackendController extends Controller
         $this->bR->deleteObject($id);
                
         return redirect()->back();
-    
     }
     
-    public function saveRoom($id = null, Request $request)
+    public function savePerson($id = null, Request $request)
     {
 
         if($request->isMethod('post'))
         {
-            if($id) // editing room
-            $this->authorize('checkOwner', $this->bR->getRoom($id));
-            else // adding a new room
+            if($id) // editing
+            $this->authorize('checkOwner', $this->bR->getPerson($id));
+            else // adding a new person
             $this->authorize('checkOwner', $this->bR->getObject($request->input('object_id')));   
 
-            $this->bG->saveRoom($id, $request);
+            $this->bG->savePerson($id, $request);
             
-            //if($id)
-            //return redirect()->back();
-            //return redirect()->route('myObjects');
-            //else
             return redirect()->route('myObjects');
 
         }
 
         if($id)
-        return view('backend.saveroom',['room'=>$this->bR->getRoom($id)]);
+        return view('backend.saveperson',['person'=>$this->bR->getPerson($id)]);
         else
-        return view('backend.saveroom',['object_id'=>$request->input('object_id')]);
+        return view('backend.saveperson',['object_id'=>$request->input('object_id')]);
     }
     
-    public function deleteRoom($id)
+    public function deletePerson($id)
     {
-        $room =  $this->bR->getRoom($id);
+        $person =  $this->bR->getPerson($id);
         
-        $this->authorize('checkOwner', $room);
+        $this->authorize('checkOwner', $person);
 
-        $this->bR->deleteRoom($room);
+        $this->bR->deletePerson($person);
 
         return redirect()->back();
     }
 
-    // public function deleteArticle($id)
-    // {
-    //     return 'to do';
-    // }
-    
-    
-    // /* Lecture 44 */
-    // public function saveArticle($object_id = null)
-    // {
-    //     return 'to do';
-    // }
+    public function showPerson($id)
+    {
+        $person = Person::findOrFail($id);
+        return view('backend.showperson', compact('person'));
+    }
+
+    public function showTeam($id)
+    {
+        $object = TeamObject::findOrFail($id);
+        return view('backend.showteam', compact('object'));
+    }
+
 }

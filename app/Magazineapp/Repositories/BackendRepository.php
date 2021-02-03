@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Magazineapp\Repositories; /* Lecture 27 */
+namespace App\Magazineapp\Repositories;
 
-use App\Magazineapp\Interfaces\BackendRepositoryInterface;  /* Lecture 27 */
-use App\{User, Photo, Address, TeamObject, Room};
+use App\Magazineapp\Interfaces\BackendRepositoryInterface; 
+use App\{User, Photo, Address, TeamObject, Person};
 
-
-/* Lecture 27 */
 class BackendRepository implements BackendRepositoryInterface  {   
  
     public function saveUser($request)
@@ -20,20 +18,16 @@ class BackendRepository implements BackendRepositoryInterface  {
         return $user;
     }
 
-        /* Lecture 40 */
     public function getPhoto($id)
     {
         return Photo::find($id);
     }
     
-    
-    /* Lecture 40 */
     public function updateUserPhoto(User $user,Photo $photo)
     {
         return $user->photos()->save($photo);
     }
     
-    /* Lecture 40 */
     public function createUserPhoto($user,$path)
     {
         $photo = new Photo;
@@ -41,7 +35,6 @@ class BackendRepository implements BackendRepositoryInterface  {
         $user->photos()->save($photo);
     }
     
-    /* Lecture 40 */
     public function deletePhoto(Photo $photo)
     {
         $path = $photo->storagepath;
@@ -51,11 +44,9 @@ class BackendRepository implements BackendRepositoryInterface  {
         
     public function getObject($id)
     {
-        return TeamObject::find($id);//zmienić nazwę TouristObject na TeamObject
+        return TeamObject::find($id);
     }
     
-    
-    /* Lecture 42 */
     public function updateObjectWithAddress($id, $request)
     {
 
@@ -69,7 +60,6 @@ class BackendRepository implements BackendRepositoryInterface  {
 
 
         $object->name = $request->input('name');
-        //$object->city_id = $request->input('city');
         $object->description = $request->input('description');
 
         $object->save();
@@ -78,11 +68,9 @@ class BackendRepository implements BackendRepositoryInterface  {
 
     }
     
-    
-    /* Lecture 42 */
     public function createNewObjectWithAddress($request)
     {
-        $object = new TeamObject;//tworzenie obiektu nowego
+        $object = new TeamObject;
         $object->user_id = $request->user()->id;
         $object->name = $request->input('name');
         $object->description = $request->input('description');
@@ -120,51 +108,57 @@ class BackendRepository implements BackendRepositoryInterface  {
         return TeamObject::where('id',$id)->delete();
     }
 
-    public function getRoom($id)
+    public function getPerson($id)
     {
-        return Room::find($id);
+        return Person::find($id);
     }
 
-    public function updateRoom($id,$request)
+    public function updatePerson($id,$request)
     {
-        $room = Room::find($id);
-        $room->room_number = $request->input('room_number');
-        $room->room_size = $request->input('room_size');
-        $room->price = $request->input('price');
-        $room->description = $request->input('description');
+        $person = Person::find($id);
+        $person->name = $request->input('name');
+        $person->surname = $request->input('surname');
+        $person->city = $request->input('city');
+        $person->street = $request->input('street');
+        $person->number = $request->input('number');
+        $person->clothes = $request->input('clothes');
+        $person->description = $request->input('description');
 
-        $room->save();
+        $person->save();
 
-        return $room;
+        return $person;
     }
     
-    public function createNewRoom($request)
+    public function createNewPerson($request)
     {
-        $room = new Room;
+        $person = new Person;
         $object = TeamObject::find( $request->input('object_id') );
-        $room->object_id = $request->input('object_id') ;
+        $person->object_id = $request->input('object_id') ;
 
-        $room->room_number = $request->input('room_number');
-        $room->room_size = $request->input('room_size');
-        $room->price = $request->input('price');
-        $room->description = $request->input('description');
+        $person->name = $request->input('name');
+        $person->surname = $request->input('surname');
+        $person->city = $request->input('city');
+        $person->street = $request->input('street');
+        $person->number = $request->input('number');
+        $person->clothes = $request->input('clothes');
+        $person->description = $request->input('description');
 
-        $room->save();
+        $person->save();
 
-        $object->rooms()->save($room);
+        $object->people()->save($person);
 
-        return $room;
+        return $person;
     }
     
-    public function saveRoomPhotos(Room $room, string $path)
+    public function savePersonPhotos(Person $person, string $path)
     {
         $photo = new Photo;
         $photo->path = $path;
-        return $room->photos()->save($photo); 
+        return $person->photos()->save($photo); 
     }
     
-    public function deleteRoom(Room $room)
+    public function deletePerson(Person $person)
     {
-        return $room->delete();
+        return $person->delete();
     }
 }

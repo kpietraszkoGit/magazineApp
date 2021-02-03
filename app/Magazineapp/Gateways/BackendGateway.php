@@ -39,9 +39,13 @@ class BackendGateway {
         'name'=>"required|string",
         'street'=>"required|string",
         'number'=>"required|integer",
-        'description'=>"required|string|min:100",
+        'description'=>"required|string|min:20|max:400",
         ]);
-        
+
+        if ($request->hasFile('objectPictures'))
+        {   
+            $request->validate( \App\Photo::imageRules($request,'objectPictures'));
+        }
         
         if($id)
         {
@@ -54,58 +58,58 @@ class BackendGateway {
 
 
         if ($request->hasFile('objectPictures'))
-        {
-            
-            $request->validate( \App\Photo::imageRules($request,'objectPictures'));
-            
+        {            
             foreach($request->file('objectPictures') as $picture)
             {
                 $path = $picture->store('objects', 'public');
 
                 $this->bR->saveObjectPhotos($object, $path);
             }
-
         }
             
         return $object;
                 
     }
 
-    public function saveRoom($id, $request)
+    public function savePerson($id, $request)
     {
     
         $request->validate([
-        'room_number'=>"required|integer",
-        'room_size'=>"required|integer",
-        'price'=>"required|integer",
-        'description'=>"required|string|min:100",
-        ]);
+            'name'=>"required|string",
+            'surname'=>"required|string",
+            'city'=>"required|string",
+            'street'=>"required|string",
+            'number'=>"required|integer",
+            'clothes'=>"required|string",
+            'description'=>"required|string|min:20|max:200",
+            ]);
+
+        if ($request->hasFile('personPictures'))
+        {
+            $request->validate( \App\Photo::imageRules($request,'personPictures'));
+        }
 
         if($id)
         {
-            $room = $this->bR->updateRoom($id,$request); 
-
+            $person = $this->bR->updatePerson($id,$request); 
         }
         else
         {
-            $room = $this->bR->createNewRoom($request); 
+            $person = $this->bR->createNewPerson($request); 
         }
 
 
-        if ($request->hasFile('roomPictures'))
+        if ($request->hasFile('personPictures'))
         {
-            $request->validate( \App\Photo::imageRules($request,'roomPictures'));
-
-            foreach($request->file('roomPictures') as $picture)
+            foreach($request->file('personPictures') as $picture)
             {
-                $path = $picture->store('rooms', 'public');
+                $path = $picture->store('persons', 'public');
 
-                $this->bR->saveRoomPhotos($room, $path);
+                $this->bR->savePersonPhotos($person, $path);
             }
-
         }
 
-            return $room;
+        return $person;
             
     }
     
