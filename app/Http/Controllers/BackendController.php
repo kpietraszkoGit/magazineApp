@@ -194,7 +194,7 @@ class BackendController extends Controller
             $zywiecwoman->save();
         }
         else{
-            dump('ERROR SAVE');
+            //dump('ERROR SAVE');
             Session::flash('message', 'Save unsuccessfully!');
             Session::flash('alert-class', 'alert-danger');
             return redirect(route('adminHome'));
@@ -465,7 +465,7 @@ class BackendController extends Controller
             $zywiecwoman->save();
         }
         else{
-            dump('ERROR UPDATE');
+            //dump('ERROR UPDATE');
             Session::flash('message', 'Delete unsuccessfully!');
             Session::flash('alert-class', 'alert-danger');
             return redirect(route('shop.index'));
@@ -478,15 +478,13 @@ class BackendController extends Controller
     public function delete($id, Request $request)
     {
         if($request->table == 'Highlanderoutfitman'){
-            dump('hello Highlanderoutfitman show');
+            //dump('hello Highlanderoutfitman show');
             $highlanderoutfitman = Highlanderoutfitman::find($id);
-            dump($id);
+            //dump($id);
             Highlanderoutfitman::where('id', $id)->delete();
         }
         elseif($request->table == 'Highlanderoutfitwoman'){
-            dump('hello Highlanderoutfitwoman show');
             $highlanderoutfitwoman = Highlanderoutfitwoman::find($id);
-            dump($id);
             Highlanderoutfitwoman::where('id', $id)->delete();
         }
         elseif($request->table == 'Shepherdoutfitman'){
@@ -526,7 +524,7 @@ class BackendController extends Controller
             Zywiecwoman::where('id', $id)->delete();
         }
         else{
-            dump('ERROR DELETE');
+            //dump('ERROR DELETE');
             Session::flash('message', 'Delete unsuccessfully!');
             Session::flash('alert-class', 'alert-danger');
             return redirect()->back();
@@ -602,9 +600,9 @@ class BackendController extends Controller
 
             $this->bG->saveObject($id, $request);
 
-            // if($id)
-            // return redirect()->back();
-            // else
+            if($id)
+            return redirect()->back();
+            else
             return redirect()->route('myObjects');
 
         }
@@ -635,9 +633,11 @@ class BackendController extends Controller
             $this->authorize('checkOwner', $this->bR->getObject($request->input('object_id')));   
 
             $this->bG->savePerson($id, $request);
-            
-            return redirect()->route('myObjects');
 
+            if($id)
+            return redirect()->back();
+            else
+            return redirect()->route('myObjects');
         }
 
         if($id)
