@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/linkstorage', function() {
+  Artisan::call('storage:link');
+});
 
 Route::get('/','FrontendController@index')->name('home');
 Route::get(trans('routes.object'),'FrontendController@object')->name('object');
