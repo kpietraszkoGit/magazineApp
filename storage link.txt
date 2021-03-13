@@ -1,0 +1,10 @@
+Przykład:
+https://www.your-domain.com/public/index.php/linkstorage
+https://www.your-domain.com/public/linkstorage
+
+Trzeba ten adres URL wpisać w przeglądarkę:
+https://magazineapp.kamilpietraszko.it/public/index.php/linkstorage
+https://magazineapp.kamilpietraszko.it/public/linkstorage
+
+Jak rozwiązać problem z php artisan storage:link jak nie działa na serwerze:
+https://medium.com/@fadiramzi.99/how-to-fix-the-storage-link-issue-of-laravel-project-on-production-with-using-the-shared-hosting-e092d8177054
